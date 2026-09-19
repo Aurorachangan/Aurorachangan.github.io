@@ -1,0 +1,2512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>素境智投数字化种草平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0f766e;
+            --secondary-color: #155e75;
+            --accent-color: #f59e0b;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --page-bg: #f4f8f7;
+            --surface-color: #ffffff;
+            --muted-surface: #e8f1ef;
+            --text-color: #183238;
+            --border-color: #d5e3df;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--page-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        body.dark-mode {
+            --page-bg: #121417;
+            --surface-color: #1d2126;
+            --muted-surface: #282d33;
+            --text-color: #e9ecef;
+            --border-color: #495057;
+            --light-color: #282d33;
+        }
+
+        body.dark-mode .card,
+        body.dark-mode .bg-light,
+        body.dark-mode .profile-summary,
+        body.dark-mode .history-item {
+            background-color: var(--surface-color) !important;
+            color: var(--text-color);
+        }
+
+        body.dark-mode .text-muted,
+        body.dark-mode .form-text {
+            color: #adb5bd !important;
+        }
+
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
+            background-color: #252a30;
+            border-color: var(--border-color);
+            color: var(--text-color);
+        }
+
+        body.dark-mode .table {
+            --bs-table-bg: var(--surface-color);
+            --bs-table-color: var(--text-color);
+            --bs-table-striped-bg: #252a30;
+        }
+
+        body.dark-mode .history-empty {
+            border-color: var(--border-color);
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(120deg, #0f3d3e 0%, #0f766e 55%, #155e75 100%);
+            color: white;
+            padding: 88px 0 96px;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 360px;
+            height: 360px;
+            right: -90px;
+            top: -140px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 50%;
+            box-shadow: 0 0 0 32px rgba(255, 255, 255, 0.04), 0 0 0 64px rgba(255, 255, 255, 0.03);
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 13px;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 999px;
+            color: #d5faf1;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+        }
+
+        .hero h1 {
+            max-width: 780px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .hero .lead {
+            max-width: 680px;
+            margin-left: auto;
+            margin-right: auto;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 24px rgba(15, 61, 62, 0.07);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 30px 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card .card-text {
+            flex-grow: 1;
+        }
+
+        .feature-card .btn {
+            align-self: stretch;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            margin-right: 8px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #fbbf24, #f97316);
+            color: #123b3c;
+            box-shadow: 0 5px 14px rgba(245, 158, 11, 0.22);
+        }
+
+        .navbar {
+            background: #102f35 !important;
+            box-shadow: 0 5px 18px rgba(16, 47, 53, 0.18);
+        }
+
+        .navbar-brand {
+            display: inline-flex;
+            align-items: center;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(15, 118, 110, 0.2);
+        }
+
+        .tab-content {
+            margin-top: 30px;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.4rem 0.8rem;
+        }
+
+        .koc-card {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .risk-high {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .risk-medium {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .risk-low {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .global-loading {
+            position: fixed;
+            inset: 0;
+            z-index: 2100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.45);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .global-loading.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .global-loading .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .toast-container {
+            z-index: 2200;
+        }
+
+        .pagination-summary {
+            min-width: 130px;
+            text-align: center;
+        }
+
+        .feature-subnav {
+            background-color: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .feature-subnav .nav-link {
+            color: var(--text-color);
+            border-bottom: 3px solid transparent;
+            border-radius: 0;
+        }
+
+        .feature-subnav .nav-link.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .auth-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.72);
+        }
+
+        .auth-backdrop[hidden] {
+            display: none;
+        }
+
+        .auth-card {
+            width: min(92vw, 420px);
+        }
+
+        .profile-summary {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .history-item {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .history-item .history-meta {
+            font-size: 0.85rem;
+        }
+
+        .site-footer {
+            position: relative;
+            overflow: hidden;
+            margin-top: auto;
+            padding: 32px 0 14px;
+            background: #102f35;
+            color: #d9ece9;
+        }
+
+        .site-footer::before {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto;
+            height: 3px;
+            background: linear-gradient(90deg, #f59e0b, #14b8a6, #38bdf8);
+        }
+
+        .site-footer::after {
+            content: '';
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            right: -100px;
+            bottom: -180px;
+            border: 1px solid rgba(130, 211, 198, 0.13);
+            border-radius: 50%;
+            box-shadow: 0 0 0 22px rgba(130, 211, 198, 0.04), 0 0 0 44px rgba(130, 211, 198, 0.025);
+            pointer-events: none;
+        }
+
+        .site-footer .footer-brand {
+            color: #ffffff;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .site-footer .footer-title {
+            color: #ffffff;
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+        }
+
+        .site-footer .footer-copy,
+        .site-footer .footer-link,
+        .site-footer .footer-meta {
+            color: #a9c7c3;
+            font-size: 0.86rem;
+            line-height: 1.55;
+        }
+
+        .site-footer .footer-link {
+            display: block;
+            margin-top: 5px;
+            text-decoration: none;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .site-footer .footer-link:hover {
+            color: #fbbf24;
+            transform: translateX(3px);
+        }
+
+        .footer-bottom {
+            margin-top: 22px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(217, 236, 233, 0.16);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 58px 0 68px;
+            }
+
+            .hero h1 {
+                font-size: 2.25rem;
+            }
+
+            .site-footer {
+                padding: 28px 0 13px;
+            }
+        }
+
+        .history-empty {
+            border: 1px dashed #ced4da;
+            border-radius: 8px;
+        }
+
+        .risk-highlight {
+            color: #b02a37;
+            background-color: #f8d7da;
+            border-radius: 3px;
+            padding: 0 3px;
+            font-weight: 600;
+        }
+
+        .risk-preview {
+            white-space: pre-wrap;
+            word-break: break-word;
+            min-height: 48px;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 40px 0;
+            }
+
+            .feature-card {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span class="brand-mark"><i class="fas fa-seedling"></i></span>素境智投
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home-view" data-page="home">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features-view" data-page="features">功能中心</a>
+                    </li>
+                    <li class="nav-item" id="profile-nav-item" hidden>
+                        <a class="nav-link" href="#profile-center" data-page="profile"><i class="fas fa-user-circle me-1"></i>个人中心</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center ms-lg-3 mt-3 mt-lg-0">
+                    <span id="auth-user" class="text-white-50 small me-2" hidden></span>
+                    <button id="theme-toggle" class="btn btn-outline-light btn-sm me-2" type="button" title="切换深色模式" aria-label="切换深色模式"><i class="fas fa-moon"></i></button>
+                    <button id="logout-button" class="btn btn-outline-light btn-sm" type="button" hidden>退出登录</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="auth-backdrop" class="auth-backdrop" role="dialog" aria-modal="true" aria-labelledby="login-title" hidden>
+        <div class="card auth-card p-4">
+            <h2 id="login-title" class="h4 mb-2">登录素境智投平台</h2>
+            <p id="auth-description" class="text-muted small mb-4">登录后可使用全部功能，也可以游客体验基础功能。</p>
+            <form id="login-form" novalidate>
+                <div class="mb-3">
+                    <label for="login-username" class="form-label">账号</label>
+                    <input id="login-username" class="form-control" autocomplete="username" required>
+                </div>
+                <div id="email-group" class="mb-3" hidden>
+                    <label for="register-email" class="form-label">邮箱</label>
+                    <input id="register-email" class="form-control" type="email" autocomplete="email" placeholder="name@example.com">
+                </div>
+                <div id="company-group" class="mb-3" hidden>
+                    <label for="register-company" class="form-label">所属公司</label>
+                    <input id="register-company" class="form-control" autocomplete="organization" placeholder="请输入公司名称">
+                </div>
+                <div id="verification-group" class="mb-3" hidden>
+                    <label for="verification-code" class="form-label">邮箱验证码</label>
+                    <div class="input-group">
+                        <input id="verification-code" class="form-control" inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+                        <button id="send-code-button" class="btn btn-outline-primary" type="button">获取验证码</button>
+                    </div>
+                    <div id="verification-hint" class="form-text" hidden></div>
+                </div>
+                <div class="mb-3">
+                    <label for="login-password" class="form-label">密码</label>
+                    <input id="login-password" class="form-control" type="password" autocomplete="current-password" required>
+                </div>
+                <div id="confirm-password-group" class="mb-3" hidden>
+                    <label for="confirm-password" class="form-label">确认密码</label>
+                    <input id="confirm-password" class="form-control" type="password" autocomplete="new-password">
+                </div>
+                <div id="login-error" class="alert alert-danger py-2" role="alert" hidden></div>
+                <button class="btn btn-primary w-100" type="submit">登录</button>
+            </form>
+            <button id="guest-mode-button" class="btn btn-outline-secondary w-100 mt-2" type="button"><i class="fas fa-user-clock me-1"></i>游客模式（部分功能受限）</button>
+            <div class="text-center mt-3">
+                <button id="toggle-auth-mode" class="btn btn-link btn-sm p-0" type="button">没有账号？立即注册</button>
+            </div>
+            <p id="demo-account-hint" class="text-muted small mt-3 mb-0">演示账号：admin　密码：123456</p>
+        </div>
+    </div>
+
+    <div id="global-loading" class="global-loading" role="status" aria-live="polite" aria-label="正在处理">
+        <div class="text-center text-white"><div class="spinner-border" role="status"></div><div id="global-loading-text" class="mt-3">正在处理，请稍候...</div></div>
+    </div>
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="app-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex"><div id="toast-message" class="toast-body"></div><button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="关闭"></button></div>
+        </div>
+    </div>
+
+    <section id="profile-center" class="py-10 bg-light" data-page-view="profile" hidden>
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div>
+                    <h2 class="mb-1">个人中心</h2>
+                    <p class="text-muted mb-0">查看账号资料与历史任务，快速恢复之前的工作进度</p>
+                </div>
+                <span class="badge bg-primary" id="history-count">0 条历史任务</span>
+            </div>
+            <div class="card profile-summary p-4 mb-4">
+                <div class="row g-3">
+                    <div class="col-md-6"><span class="text-muted d-block small">账号</span><strong id="profile-username">--</strong></div>
+                    <div class="col-md-6"><span class="text-muted d-block small">所属公司</span><strong id="profile-company">--</strong></div>
+                </div>
+            </div>
+            <div class="card p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div><h3 class="h5 mb-1">合规审查</h3><p class="text-muted small mb-0">在个人中心管理文案风险与自定义违禁词库</p></div>
+                    <a class="btn btn-outline-primary btn-sm" href="#compliance-review" data-page="profile">打开审查工具</a>
+                </div>
+            </div>
+            <div id="history-list" class="row g-3"></div>
+        </div>
+    </section>
+
+
+    <!-- 英雄区域 -->
+    <section class="hero" id="dashboard" data-page-view="home">
+        <div class="container text-center">
+            <div class="eyebrow mb-3"><i class="fas fa-sparkles"></i> DATA-DRIVEN CONTENT GROWTH</div>
+            <h1 class="display-4 mb-4">素境智投数字化种草平台</h1>
+            <p class="lead mb-6">从需求洞察到内容投放，让每一次种草都更精准、更高效、更有确定性。</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#features-view" data-page="features" class="btn btn-light btn-lg">开始使用</a>
+                <a href="#features-view" data-page="features" class="btn btn-outline-light btn-lg">进入功能中心</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 功能模块 -->
+    <section id="home-features" class="py-10" data-page-view="home">
+        <div class="container">
+            <h2 class="text-center mb-8">核心功能模块</h2>
+            <div class="row">
+                <!-- 品牌需求智能解析 -->
+                <div class="col-md-3">
+                    <div class="card feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3 class="card-title">品牌需求智能解析</h3>
+                        <p class="card-text">自动拆解品牌需求为结构化数据，识别垂直领域、目标人群、内容风格等</p>
+                        <a href="#features-view" data-page="features" class="btn btn-primary mt-3">立即使用</a>
+                    </div>
+                </div>
+
+                <!-- 校园KOC智能匹配 -->
+                <div class="col-md-3">
+                    <div class="card feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="card-title">校园KOC智能匹配</h3>
+                        <p class="card-text">基于多维度数据模型，实时匹配最适合的校园KOC，包含排重与防水检测</p>
+                        <a href="#features-view" data-page="features" class="btn btn-primary mt-3">立即使用</a>
+                    </div>
+                </div>
+
+                <!-- 投放排期自动生成 -->
+                <div class="col-md-3">
+                    <div class="card feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="card-title">投放排期自动生成</h3>
+                        <p class="card-text">智能生成优化的发布时间，自动分配内容主题，计算预估曝光量</p>
+                        <a href="#features-view" data-page="features" class="btn btn-primary mt-3">立即使用</a>
+                    </div>
+                </div>
+
+                <!-- 合规前置审查 -->
+                <div class="col-md-3">
+                    <div class="card feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="card-title">合规前置审查</h3>
+                        <p class="card-text">实时审查文案/脚本，识别禁用词汇、医疗化功效描述等合规风险</p>
+                        <a href="#features-view" data-page="features" class="btn btn-primary mt-3">立即使用</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 品牌需求智能解析 -->
+    <div id="features-view" data-page-view="features">
+    <div id="feature-subnav" class="feature-subnav" aria-label="功能中心子页面">
+        <div class="container">
+            <ul class="nav nav-pills py-2 gap-2">
+                <li class="nav-item"><a class="nav-link active" href="#demand-analysis" data-feature-page="demand">需求解析</a></li>
+                <li class="nav-item"><a class="nav-link" href="#koc-matching" data-feature-page="koc">KOC匹配</a></li>
+                <li class="nav-item"><a class="nav-link" href="#schedule-generation" data-feature-page="schedule">排期生成</a></li>
+                <li class="nav-item"><a class="nav-link" href="#checkout-center" data-feature-page="checkout"><i class="fas fa-receipt me-1"></i>结算中心</a></li>
+            </ul>
+        </div>
+    </div>
+    <section id="demand-analysis" class="py-10 bg-light" data-feature-page-view="demand">
+        <div class="container">
+            <h2 class="text-center mb-6">品牌需求智能解析系统</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card p-4">
+                        <h3 class="card-title mb-4">输入需求描述</h3>
+                        <div class="mb-4">
+                            <label for="demand-input" class="form-label">需求描述</label>
+                            <textarea id="demand-input" class="form-control" rows="4" placeholder="例如：大学生美妆护肤，预算 2 万，要 100 个校园 KOC，偏真实种草"></textarea>
+                        </div>
+                        <button id="analyze-demand" class="btn btn-primary w-100">
+                            <i class="fas fa-analyze mr-2"></i>智能解析
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card p-4">
+                        <h3 class="card-title mb-4">解析结果</h3>
+                        <div id="demand-result" class="mt-4">
+                            <div class="loading show">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>等待解析...
+                            </div>
+                            <div id="result-content" style="display: none;">
+                                <div class="mb-3">
+                                    <h4>垂直领域</h4>
+                                    <p id="vertical-field" class="text-muted">--</p>
+                                </div>
+                                <div class="mb-3">
+                                    <h4>目标人群</h4>
+                                    <p id="target-audience" class="text-muted">--</p>
+                                </div>
+                                <div class="mb-3">
+                                    <h4>博主量级</h4>
+                                    <p id="blogger-level" class="text-muted">--</p>
+                                </div>
+                                <div class="mb-3">
+                                    <h4>内容风格</h4>
+                                    <p id="content-style" class="text-muted">--</p>
+                                </div>
+                                <div class="mb-3">
+                                    <h4>预算</h4>
+                                    <p id="budget" class="text-muted">--</p>
+                                </div>
+                                <div class="mb-3">
+                                    <h4>数量</h4>
+                                    <p id="quantity" class="text-muted">--</p>
+                                </div>
+                                <div class="mb-3">
+                                    <h4>合规风险</h4>
+                                    <div id="compliance-risks" class="text-muted">--</div>
+                                </div>
+                                <button id="match-koc" class="btn btn-primary mt-4">
+                                    <i class="fas fa-search mr-2"></i>匹配KOC
+                                </button>
+                                <button id="download-demand" class="btn btn-outline-primary mt-2" type="button">
+                                    <i class="fas fa-download me-1"></i>下载解析结果
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 校园KOC智能匹配 -->
+    <section id="koc-matching" class="py-10" data-feature-page-view="koc">
+        <div class="container">
+            <h2 class="text-center mb-6">校园KOC智能匹配引擎</h2>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-4">
+                                <label for="koc-category" class="form-label">垂直领域</label>
+                                <select id="koc-category" class="form-select">
+                                    <option value="beauty">美妆/护肤</option>
+                                    <option value="fashion">时尚/穿搭</option>
+                                    <option value="food">美食/餐饮</option>
+                                    <option value="tech">科技/数码</option>
+                                    <option value="lifestyle">生活方式</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-4">
+                                <label for="koc-audience" class="form-label">目标人群</label>
+                                <select id="koc-audience" class="form-select">
+                                    <option value="college">大学生</option>
+                                    <option value="young-professional">年轻职场</option>
+                                    <option value="genz">Z世代</option>
+                                    <option value="all">全年龄段</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-4">
+                                <label for="koc-quantity" class="form-label">需求数量</label>
+                                <input type="number" id="koc-quantity" class="form-control" value="30" min="1" max="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="koc-min-followers" class="form-label">最低粉丝数</label>
+                            <input type="number" id="koc-min-followers" class="form-control" min="0" placeholder="不限">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="koc-min-engagement" class="form-label">最低互动率 (%)</label>
+                            <input type="number" id="koc-min-engagement" class="form-control" min="0" max="100" step="0.1" placeholder="不限">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="koc-max-risk" class="form-label">最高风险评分 (%)</label>
+                            <input type="number" id="koc-max-risk" class="form-control" min="0" max="100" step="0.1" placeholder="不限">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="koc-sort" class="form-label">排序方式</label>
+                            <select id="koc-sort" class="form-select">
+                                <option value="score">综合匹配度</option>
+                                <option value="engagement">互动率最高</option>
+                                <option value="conversion">转化率最高</option>
+                                <option value="followers">粉丝数最多</option>
+                                <option value="risk">风险评分最低</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="find-koc" class="btn btn-primary w-100">
+                        <i class="fas fa-search mr-2"></i>查找KOC
+                    </button>
+                </div>
+            </div>
+
+            <div id="koc-results">
+                <div class="loading show">
+                    <i class="fas fa-spinner fa-spin mr-2"></i>正在匹配KOC...
+                </div>
+                <div id="koc-list" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <div class="card p-4">
+                                <h3 id="koc-result-title" class="card-title">匹配结果</h3>
+                                <div class="chart-container">
+                                    <canvas id="koc-performance-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="koc-cards" class="row">
+                        <!-- KOC卡片将通过JavaScript动态生成 -->
+                    </div>
+                    <nav aria-label="KOC结果分页">
+                        <ul id="koc-pagination" class="pagination justify-content-center"></ul>
+                    </nav>
+                    <div id="koc-page-summary" class="pagination-summary text-muted small mx-auto mt-2"></div>
+                    <div class="mt-4 text-center">
+                        <button id="generate-schedule" class="btn btn-primary">
+                            <i class="fas fa-calendar-alt mr-2"></i>生成排期
+                        </button>
+                        <button id="download-koc" class="btn btn-outline-primary ms-2" type="button">
+                            <i class="fas fa-download me-1"></i>下载匹配结果
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 投放排期自动生成 -->
+    <section id="schedule-generation" class="py-10 bg-light" data-feature-page-view="schedule">
+        <div class="container">
+            <h2 class="text-center mb-6">投放排期自动生成工具</h2>
+            <div class="card p-4 mb-4">
+                <h3 class="card-title mb-4">排期设置</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-4">
+                            <label for="schedule-start" class="form-label">开始日期</label>
+                            <input type="date" id="schedule-start" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-4">
+                            <label for="schedule-end" class="form-label">结束日期</label>
+                            <input type="date" id="schedule-end" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-4">
+                            <label for="content-themes" class="form-label">内容主题数量</label>
+                            <input type="number" id="content-themes" class="form-control" value="5" min="1" max="10">
+                        </div>
+                    </div>
+                </div>
+                <button id="create-schedule" class="btn btn-primary w-100">
+                    <i class="fas fa-calendar-plus mr-2"></i>生成排期
+                </button>
+            </div>
+
+            <div id="schedule-result">
+                <div class="loading show">
+                    <i class="fas fa-spinner fa-spin mr-2"></i>正在生成排期...
+                </div>
+                <div id="schedule-content" style="display: none;">
+                    <div class="card p-4 mb-4">
+                        <h3 class="card-title">排期概览</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <h4>预估总曝光量</h4>
+                                    <p id="estimated-exposure" class="text-primary font-weight-bold">--</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <h4>预估互动率</h4>
+                                    <p id="estimated-engagement" class="text-primary font-weight-bold">--</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <h4>预估转化率</h4>
+                                    <p id="estimated-conversion" class="text-primary font-weight-bold">--</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center p-3 bg-light rounded">
+                                    <h4>预估总成本</h4>
+                                    <p id="estimated-cost" class="text-primary font-weight-bold">--</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card p-4 mb-4">
+                        <h3 class="card-title">详细排期</h3>
+                        <div id="schedule-table" class="mt-4">
+                            <!-- 排期表格将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+
+                    <div class="card p-4">
+                        <h3 class="card-title">标准化简报</h3>
+                        <div id="brief-content" class="mt-4 p-3 bg-light rounded">
+                            <!-- 简报内容将通过JavaScript动态生成 -->
+                        </div>
+                        <div class="mt-4 text-center">
+                            <button id="download-brief" class="btn btn-primary">
+                                <i class="fas fa-download mr-2"></i>下载简报
+                            </button>
+                            <button id="download-schedule" class="btn btn-outline-primary ms-2" type="button">
+                                <i class="fas fa-file-export me-1"></i>下载排期数据
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 合规前置审查 -->
+    <section id="compliance-review" class="py-10 bg-light" data-page-view="profile" data-feature-page-view="compliance">
+        <div class="container">
+            <h2 class="text-center mb-6">合规前置审查模块</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card p-4">
+                        <h3 class="card-title mb-4">输入文案/脚本</h3>
+                        <div class="mb-4">
+                            <label for="compliance-input" class="form-label">文案内容（每行一条，可批量审查）</label>
+                            <textarea id="compliance-input" class="form-control" rows="6" placeholder="请输入需要审查的文案；多条文案请换行分隔..."></textarea>
+                        </div>
+                        <div class="border rounded p-3 mb-4 bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label for="custom-forbidden-word" class="form-label mb-0">我的自定义违禁词库</label>
+                                <span id="custom-word-count" class="text-muted small">0 个词</span>
+                            </div>
+                            <div class="input-group mb-2">
+                                <input id="custom-forbidden-word" class="form-control" placeholder="输入禁用词后添加">
+                                <button id="add-forbidden-word" class="btn btn-outline-primary" type="button"><i class="fas fa-plus me-1"></i>添加</button>
+                            </div>
+                            <div id="custom-word-hint" class="form-text">登录后可保存个人违禁词库</div>
+                            <div id="custom-word-list" class="d-flex flex-wrap gap-2"></div>
+                        </div>
+                        <button id="review-compliance" class="btn btn-primary w-100">
+                            <i class="fas fa-check-circle mr-2"></i>批量合规审查
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card p-4">
+                        <h3 class="card-title mb-4">审查结果</h3>
+                        <div id="compliance-result">
+                            <div class="loading show">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>正在审查...
+                            </div>
+                            <div id="review-content" style="display: none;">
+                                <div class="mb-4">
+                                    <h4>风险等级</h4>
+                                    <div id="risk-level" class="badge rounded-pill bg-success">低风险</div>
+                                </div>
+                                <div class="mb-4">
+                                    <h4>风险内容</h4>
+                                    <div id="risk-content" class="text-muted">未发现明显风险</div>
+                                </div>
+                                <div class="mb-4">
+                                    <h4>修改建议</h4>
+                                    <div id="suggestions" class="text-muted">无需修改</div>
+                                </div>
+                                <div class="mb-4">
+                                    <h4>审查后的文案</h4>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="text-muted small">点击自动替换所有风险词</span>
+                                        <button id="replace-all-risks" class="btn btn-sm btn-outline-primary" type="button"><i class="fas fa-wand-magic-sparkles me-1"></i>一键自动替换</button>
+                                    </div>
+                                    <div id="reviewed-content" class="p-3 bg-light rounded risk-preview"></div>
+                                </div>
+                                <div id="batch-results" class="mt-4"></div>
+                                <button id="download-compliance" class="btn btn-outline-primary" type="button">
+                                    <i class="fas fa-download me-1"></i>下载审查结果
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 投放方案结算 -->
+    <section id="checkout-center" class="py-10 bg-light" data-feature-page-view="checkout">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div>
+                    <h2 class="mb-1">投放方案结算</h2>
+                    <p class="text-muted mb-0">确认服务明细、优惠与支付方式，提交后生成待支付订单</p>
+                </div>
+                <span id="checkout-status" class="badge text-bg-secondary">待确认</span>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="card p-4 h-100">
+                        <h3 class="card-title mb-4">费用明细</h3>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead><tr><th>服务项目</th><th class="text-end">数量</th><th class="text-end">单价</th><th class="text-end">小计</th></tr></thead>
+                                <tbody id="checkout-items"></tbody>
+                            </table>
+                        </div>
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6">
+                                <label for="checkout-quantity" class="form-label">KOC投放数量</label>
+                                <input id="checkout-quantity" class="form-control" type="number" min="1" max="100" value="0" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="checkout-coupon" class="form-label">优惠码</label>
+                                <input id="checkout-coupon" class="form-control" placeholder="输入 SPRING10 享9折">
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label for="checkout-note" class="form-label">订单备注</label>
+                            <textarea id="checkout-note" class="form-control" rows="3" maxlength="200" placeholder="填写开票信息、执行偏好或其他备注"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card p-4 h-100">
+                        <h3 class="card-title mb-4">结算信息</h3>
+                        <div class="d-flex justify-content-between mb-2"><span class="text-muted">商品小计</span><strong id="checkout-subtotal">¥0.00</strong></div>
+                        <div class="d-flex justify-content-between mb-2"><span class="text-muted">优惠</span><strong id="checkout-discount" class="text-success">- ¥0.00</strong></div>
+                        <div class="d-flex justify-content-between border-top pt-3 mt-3"><span>应付金额</span><strong id="checkout-total" class="text-primary fs-4">¥0.00</strong></div>
+                        <fieldset class="mt-4">
+                            <legend class="form-label">支付方式</legend>
+                            <div class="form-check"><input class="form-check-input" type="radio" name="checkout-payment" id="payment-alipay" value="alipay" checked><label class="form-check-label" for="payment-alipay"><i class="fab fa-alipay me-1"></i>支付宝</label></div>
+                            <div class="form-check mt-2"><input class="form-check-input" type="radio" name="checkout-payment" id="payment-wechat" value="wechat"><label class="form-check-label" for="payment-wechat"><i class="fab fa-weixin me-1"></i>微信支付</label></div>
+                            <div class="form-check mt-2"><input class="form-check-input" type="radio" name="checkout-payment" id="payment-unionpay" value="unionpay"><label class="form-check-label" for="payment-unionpay"><i class="fas fa-credit-card me-1"></i>银联支付</label></div>
+                        </fieldset>
+                        <button id="submit-checkout" class="btn btn-primary w-100 mt-4" type="button"><i class="fas fa-lock me-1"></i>提交结算订单</button>
+                        <div id="checkout-message" class="alert mt-3 mb-0" hidden role="status"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 支付页面 -->
+    <section id="payment-center" class="py-10" data-page-view="payment" hidden>
+        <div class="container">
+            <div class="card p-4 mx-auto" style="max-width: 620px;">
+                <div class="text-center mb-4"><div class="feature-icon mx-auto mb-3"><i class="fas fa-wallet"></i></div><h2>订单支付</h2><p class="text-muted mb-0">请使用下方方式完成支付，支付结果将以订单状态为准</p></div>
+                <div class="bg-light rounded p-3 mb-4"><div class="d-flex justify-content-between"><span class="text-muted">订单号</span><strong id="payment-order-no">--</strong></div><div class="d-flex justify-content-between mt-2"><span class="text-muted">支付方式</span><strong id="payment-method-label">--</strong></div><div class="d-flex justify-content-between mt-2"><span>应付金额</span><strong id="payment-total" class="text-primary fs-4">¥0.00</strong></div></div>
+                <div class="text-center border rounded p-4 mb-4"><i id="payment-method-icon" class="fas fa-qrcode fa-3x text-primary mb-3"></i><p id="payment-instruction" class="mb-0">请打开对应支付应用扫码完成支付</p></div>
+                <div class="d-flex gap-2"><button id="back-to-checkout" class="btn btn-outline-secondary flex-fill" type="button">返回结算</button><button id="payment-complete" class="btn btn-primary flex-fill" type="button"><i class="fas fa-check me-1"></i>我已完成支付</button></div>
+                <div id="payment-message" class="alert mt-3 mb-0" hidden role="status"></div>
+            </div>
+        </div>
+    </section>
+
+
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="footer-brand"><span class="brand-mark"><i class="fas fa-seedling"></i></span>素境智投数字化种草平台</div>
+                    <p class="footer-copy mt-3 mb-0">连接品牌需求、内容创作者与投放数据，构建可度量、可复用的数字化种草工作流。</p>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="footer-title">平台能力</div>
+                    <a class="footer-link" href="#features-view" data-page="features">需求解析</a>
+                    <a class="footer-link" href="#features-view" data-page="features" data-feature-page="koc">KOC匹配</a>
+                    <a class="footer-link" href="#profile-center" data-page="profile">合规审查</a>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <div class="footer-title">服务承诺</div>
+                    <span class="footer-link"><i class="fas fa-chart-line me-2"></i>数据辅助决策</span>
+                    <span class="footer-link"><i class="fas fa-shield-halved me-2"></i>全流程风险控制</span>
+                    <span class="footer-link"><i class="fas fa-clock me-2"></i>高效协同执行</span>
+                </div>
+                <div class="col-lg-3">
+                    <div class="footer-title">联系我们</div>
+                    <p class="footer-copy mt-3 mb-2"><i class="fas fa-envelope me-2"></i>contact@sujing-zhitou.com</p>
+                    <p class="footer-copy mb-0"><i class="fas fa-location-dot me-2"></i>专注品牌内容增长与校园种草</p>
+                </div>
+            </div>
+            <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+                <span class="footer-meta">© 2026 素境智投数字化种草平台 · 保留所有权利</span>
+                <a class="footer-meta text-decoration-none" href="#dashboard"><i class="fas fa-arrow-up me-1"></i>返回顶部</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        let kocPerformanceChart = null;
+        let matchedKOCs = [];
+        let currentKocPage = 1;
+        const kocPageSize = 6;
+
+        function renderKocPage() {
+            const totalPages = Math.max(1, Math.ceil(matchedKOCs.length / kocPageSize));
+            currentKocPage = Math.min(currentKocPage, totalPages);
+            const pageKOCs = matchedKOCs.slice((currentKocPage - 1) * kocPageSize, currentKocPage * kocPageSize);
+            const kocCards = document.getElementById('koc-cards');
+            kocCards.replaceChildren();
+            pageKOCs.forEach(function (koc) {
+                const card = document.createElement('div');
+                card.className = 'col-md-4 mb-4';
+                card.innerHTML = `
+                    <div class="card koc-card"><div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title">${koc.name}</h5><span class="badge bg-primary">${koc.university}</span>
+                        </div>
+                        <div class="mb-2"><small class="text-muted">粉丝数: ${koc.followerCount.toLocaleString()}</small></div>
+                        <div class="mb-2"><small class="text-muted">互动率: ${koc.engagementRate}%</small></div>
+                        <div class="mb-2"><small class="text-muted">转化率: ${koc.conversionRate}%</small></div>
+                        <div class="mb-2"><small class="text-muted">内容风格: ${koc.contentStyle}</small></div>
+                        <div class="mb-2"><small class="text-muted">擅长领域: ${koc.categories.join(', ')}</small></div>
+                        <div class="mb-2"><small class="text-muted">历史合作: ${koc.pastBrands.join(', ')}</small></div>
+                        <div class="mt-3"><div class="progress"><div class="progress-bar" role="progressbar" style="width: ${(1 - koc.riskScore) * 100}%"></div></div>
+                        <small class="text-muted mt-1 d-block">风险评分: ${(koc.riskScore * 100).toFixed(1)}%</small></div>
+                    </div></div>`;
+                kocCards.appendChild(card);
+            });
+            if (!matchedKOCs.length) {
+                const emptyState = document.createElement('p');
+                emptyState.className = 'text-muted text-center col-12';
+                emptyState.textContent = '暂无符合条件的KOC，请调整筛选条件。';
+                kocCards.appendChild(emptyState);
+            }
+            document.getElementById('koc-result-title').textContent = `匹配结果 (${matchedKOCs.length})`;
+            const pagination = document.getElementById('koc-pagination');
+            pagination.replaceChildren();
+            const appendPageButton = function (label, page, disabled, ariaLabel) {
+                const item = document.createElement('li');
+                item.className = `page-item${disabled ? ' disabled' : ''}`;
+                const button = document.createElement('button');
+                button.className = 'page-link';
+                button.textContent = label;
+                button.disabled = disabled;
+                button.setAttribute('aria-label', ariaLabel);
+                if (!disabled) {
+                    button.addEventListener('click', function () {
+                        currentKocPage = page;
+                        renderKocPage();
+                    });
+                }
+                item.appendChild(button);
+                pagination.appendChild(item);
+            };
+            appendPageButton('上一页', currentKocPage - 1, currentKocPage === 1, '上一页');
+            for (let page = 1; page <= totalPages; page += 1) {
+                const item = document.createElement('li');
+                item.className = `page-item${page === currentKocPage ? ' active' : ''}`;
+                const button = document.createElement('button');
+                button.className = 'page-link';
+                button.textContent = page;
+                button.addEventListener('click', function () {
+                    currentKocPage = page;
+                    renderKocPage();
+                });
+                item.appendChild(button);
+                pagination.appendChild(item);
+            }
+            appendPageButton('下一页', currentKocPage + 1, currentKocPage === totalPages, '下一页');
+            document.getElementById('koc-page-summary').textContent = `第 ${currentKocPage} / ${totalPages} 页，共 ${matchedKOCs.length} 条`;
+            const ctx = document.getElementById('koc-performance-chart').getContext('2d');
+            if (kocPerformanceChart) {
+                kocPerformanceChart.destroy();
+            }
+            kocPerformanceChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: matchedKOCs.slice(0, 10).map(koc => koc.name),
+                    datasets: [
+                        { label: '预估曝光量', data: matchedKOCs.slice(0, 10).map(koc => koc.performanceData.exposure), backgroundColor: 'rgba(102, 126, 234, 0.6)' },
+                        { label: '预估互动数', data: matchedKOCs.slice(0, 10).map(koc => koc.performanceData.engagement), backgroundColor: 'rgba(118, 75, 162, 0.6)' }
+                    ]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'top' }, title: { display: true, text: 'Top 10 KOC 性能数据' } }, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        // 初始化日期
+        document.addEventListener('DOMContentLoaded', function () {
+            const authBackdrop = document.getElementById('auth-backdrop');
+            const loginForm = document.getElementById('login-form');
+            const loginError = document.getElementById('login-error');
+            const loginTitle = document.getElementById('login-title');
+            const authDescription = document.getElementById('auth-description');
+            const emailGroup = document.getElementById('email-group');
+            const registerEmail = document.getElementById('register-email');
+            const verificationGroup = document.getElementById('verification-group');
+            const verificationCode = document.getElementById('verification-code');
+            const sendCodeButton = document.getElementById('send-code-button');
+            const verificationHint = document.getElementById('verification-hint');
+            const confirmPasswordGroup = document.getElementById('confirm-password-group');
+            const confirmPassword = document.getElementById('confirm-password');
+            const submitButton = loginForm.querySelector('button[type="submit"]');
+            const toggleAuthMode = document.getElementById('toggle-auth-mode');
+            const demoAccountHint = document.getElementById('demo-account-hint');
+            const authUser = document.getElementById('auth-user');
+            const logoutButton = document.getElementById('logout-button');
+            const profileNavItem = document.getElementById('profile-nav-item');
+            const profileCenter = document.getElementById('profile-center');
+            const profileUsername = document.getElementById('profile-username');
+            const profileCompany = document.getElementById('profile-company');
+            const historyList = document.getElementById('history-list');
+            const historyCount = document.getElementById('history-count');
+            const companyGroup = document.getElementById('company-group');
+            const registerCompany = document.getElementById('register-company');
+            const guestModeButton = document.getElementById('guest-mode-button');
+            const customForbiddenWord = document.getElementById('custom-forbidden-word');
+            const addForbiddenWord = document.getElementById('add-forbidden-word');
+            const customWordHint = document.getElementById('custom-word-hint');
+            const createScheduleButton = document.getElementById('create-schedule');
+            const themeToggle = document.getElementById('theme-toggle');
+            const globalLoading = document.getElementById('global-loading');
+            const globalLoadingText = document.getElementById('global-loading-text');
+            const appToast = document.getElementById('app-toast');
+            const toastMessage = document.getElementById('toast-message');
+            const apiBase = window.location.protocol === 'file:' || window.location.port !== '3000'
+                ? 'http://127.0.0.1:3000/api'
+                : '/api';
+            let authMode = 'login';
+            let pendingVerification = null;
+            let verificationTimer = null;
+            let currentTaskId = null;
+            let authToken = sessionStorage.getItem('lishang-auth-token') || '';
+            let currentUser = null;
+            let currentProjectData = {};
+            let reviewResults = [];
+            let latestDemandResult = null;
+            let checkoutTotal = 0;
+
+            let backendOnline = true;
+
+            async function apiFetch(path, options = {}) {
+                const headers = new Headers(options.headers || {});
+                headers.set('Content-Type', 'application/json');
+                if (authToken) {
+                    headers.set('Authorization', `Bearer ${authToken}`);
+                }
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 15000);
+                let response;
+                try {
+                    response = await fetch(`${apiBase}${path}`, { ...options, headers, signal: controller.signal });
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        throw new Error('请求超时，请检查后端服务是否正常后重试');
+                    }
+                    // TypeError: Failed to fetch —— 后端未启动 / 端口不通 / 跨域被拦截
+                    backendOnline = false;
+                    showBackendStatusBanner(false);
+                    throw new Error('无法连接本地后端服务（127.0.0.1:3000），请先在 server 目录执行 npm start 后重试');
+                } finally {
+                    clearTimeout(timeoutId);
+                }
+                backendOnline = true;
+                showBackendStatusBanner(true);
+                const payload = await response.json().catch(() => ({}));
+                if (!response.ok) {
+                    throw new Error(payload.message || `请求失败（${response.status}）`);
+                }
+                return payload;
+            }
+
+            function showBackendStatusBanner(isOnline) {
+                let banner = document.getElementById('backend-status-banner');
+                if (isOnline) {
+                    if (banner) banner.remove();
+                    return;
+                }
+                if (banner) return;
+                banner = document.createElement('div');
+                banner.id = 'backend-status-banner';
+                banner.className = 'alert alert-danger alert-dismissible fade show m-0 rounded-0 text-center';
+                banner.setAttribute('role', 'alert');
+                banner.innerHTML = '<strong>后端服务未连接。</strong>请在 <code>server</code> 目录执行 <code>npm start</code>，看到 “Lishang server listening” 后刷新页面。<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="关闭"></button>';
+                document.body.insertBefore(banner, document.body.firstChild);
+            }
+
+            async function checkBackendHealth() {
+                try {
+                    const response = await fetch(`${apiBase}/health`, { method: 'GET' });
+                    if (!response.ok) throw new Error('health check failed');
+                    backendOnline = true;
+                    showBackendStatusBanner(true);
+                    return true;
+                } catch (error) {
+                    backendOnline = false;
+                    showBackendStatusBanner(false);
+                    return false;
+                }
+            }
+
+            function showFeaturePage(featurePage) {
+                const targetFeaturePage = featurePage || 'demand';
+                document.querySelectorAll('[data-feature-page-view]').forEach(function (view) {
+                    view.hidden = view.dataset.featurePageView !== targetFeaturePage;
+                });
+                document.querySelectorAll('[data-feature-page]').forEach(function (link) {
+                    link.classList.toggle('active', link.dataset.featurePage === targetFeaturePage);
+                });
+            }
+
+            function renderCheckout() {
+                const quantityInput = document.getElementById('checkout-quantity');
+                const quantity = matchedKOCs.length;
+                quantityInput.value = quantity;
+                const unitPrice = 280;
+                const serviceFee = 2000;
+                const subtotal = quantity ? quantity * unitPrice + serviceFee : 0;
+                const coupon = document.getElementById('checkout-coupon').value.trim().toUpperCase();
+                const discount = coupon === 'SPRING10' ? Math.round(subtotal * 0.1 * 100) / 100 : 0;
+                checkoutTotal = subtotal - discount;
+                document.getElementById('checkout-items').innerHTML = quantity ? `<tr><td>校园KOC内容投放</td><td class="text-end">${quantity}</td><td class="text-end">¥${unitPrice.toFixed(2)}</td><td class="text-end">¥${(quantity * unitPrice).toFixed(2)}</td></tr><tr><td>策略与项目管理服务</td><td class="text-end">1</td><td class="text-end">¥${serviceFee.toFixed(2)}</td><td class="text-end">¥${serviceFee.toFixed(2)}</td></tr>` : '<tr><td colspan="4" class="text-center text-muted">请先完成 KOC 匹配</td></tr>';
+                document.getElementById('checkout-subtotal').textContent = `¥${subtotal.toFixed(2)}`;
+                document.getElementById('checkout-discount').textContent = `- ¥${discount.toFixed(2)}`;
+                document.getElementById('checkout-total').textContent = `¥${checkoutTotal.toFixed(2)}`;
+            }
+
+            function showPage(pageName, featurePage) {
+                const targetPage = pageName === 'profile' && !getCurrentUser() ? 'home' : pageName;
+                document.querySelectorAll('[data-page-view]').forEach(function (view) {
+                    view.hidden = view.dataset.pageView !== targetPage;
+                });
+                document.querySelectorAll('[data-page]').forEach(function (link) {
+                    link.classList.toggle('active', link.dataset.page === targetPage);
+                });
+                if (pageName === 'profile' && targetPage !== 'profile') {
+                    showToast('请先登录后访问个人中心', 'warning');
+                }
+                if (targetPage === 'features') {
+                    showFeaturePage(featurePage);
+                }
+                const featureView = document.getElementById('features-view');
+                const featureSubnav = document.getElementById('feature-subnav');
+                if (targetPage === 'profile') {
+                    featureView.hidden = false;
+                    featureSubnav.hidden = true;
+                    showFeaturePage('compliance');
+                } else {
+                    featureSubnav.hidden = false;
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function showToast(message, type) {
+                toastMessage.textContent = message;
+                appToast.className = `toast text-bg-${type || 'primary'}`;
+                bootstrap.Toast.getOrCreateInstance(appToast, { delay: 3200 }).show();
+            }
+
+            function setGlobalLoading(isLoading, message) {
+                globalLoadingText.textContent = message || '正在处理，请稍候...';
+                globalLoading.classList.toggle('show', isLoading);
+            }
+
+            function getDraftKey() {
+                return `lishang-form-draft-${currentUser?.username || 'guest'}`;
+            }
+
+            function isGuestMode() {
+                return !authToken;
+            }
+
+            function applyGuestRestrictions(isGuest) {
+                customForbiddenWord.disabled = isGuest;
+                addForbiddenWord.disabled = isGuest;
+                createScheduleButton.disabled = isGuest;
+                customWordHint.textContent = isGuest ? '游客模式不可保存自定义词库，请先登录' : '登录后可保存个人违禁词库';
+                customWordHint.classList.toggle('text-warning', isGuest);
+                document.getElementById('submit-checkout').disabled = isGuest || !matchedKOCs.length;
+            }
+
+            function getDraftFields() {
+                return document.querySelectorAll('#demand-analysis textarea, #koc-matching input, #koc-matching select, #schedule-generation input, #compliance-review textarea');
+            }
+
+            function saveDrafts() {
+                const drafts = {};
+                getDraftFields().forEach(function (field) {
+                    drafts[field.id] = field.value;
+                });
+                localStorage.setItem(getDraftKey(), JSON.stringify(drafts));
+            }
+
+            function restoreDrafts() {
+                const drafts = JSON.parse(localStorage.getItem(getDraftKey()) || '{}');
+                getDraftFields().forEach(function (field) {
+                    if (Object.prototype.hasOwnProperty.call(drafts, field.id)) {
+                        field.value = drafts[field.id];
+                    }
+                });
+            }
+
+            function applyTheme(theme) {
+                const isDark = theme === 'dark';
+                document.body.classList.toggle('dark-mode', isDark);
+                themeToggle.innerHTML = `<i class="fas fa-${isDark ? 'sun' : 'moon'}"></i>`;
+                themeToggle.title = isDark ? '切换浅色模式' : '切换深色模式';
+                themeToggle.setAttribute('aria-label', themeToggle.title);
+            }
+
+            applyTheme(localStorage.getItem('lishang-theme') || 'light');
+            window.alert = message => showToast(message, 'danger');
+            themeToggle.addEventListener('click', function () {
+                const nextTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+                localStorage.setItem('lishang-theme', nextTheme);
+                applyTheme(nextTheme);
+                showToast(nextTheme === 'dark' ? '已切换为深色模式' : '已切换为浅色模式', 'primary');
+            });
+            getDraftFields().forEach(field => field.addEventListener('input', saveDrafts));
+
+            function getCurrentUser() {
+                return currentUser;
+            }
+
+            async function renderHistory() {
+                const user = getCurrentUser();
+                let history = [];
+                if (user && authToken) {
+                    try {
+                        history = (await apiFetch('/project/list')).projects || [];
+                    } catch (error) {
+                        showToast(error.message, 'danger');
+                    }
+                }
+                profileUsername.textContent = user ? user.username : '--';
+                profileCompany.textContent = user ? (user.company || '未填写') : '--';
+                historyCount.textContent = `${history.length} 条历史任务`;
+                historyList.replaceChildren();
+                if (!history.length) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'history-empty text-center text-muted py-5';
+                    emptyState.textContent = '暂时没有历史任务，完成一次需求解析后就会显示在这里。';
+                    historyList.appendChild(emptyState);
+                    return;
+                }
+                history.forEach(function (task) {
+                    const item = document.createElement('div');
+                    item.className = 'col-lg-6';
+                    item.innerHTML = `<div class="card history-item h-100 p-4">
+                        <div class="d-flex justify-content-between align-items-start gap-3">
+                            <div><h3 class="h5 mb-2"></h3><p class="history-meta text-muted mb-0"></p></div>
+                            <span class="badge bg-success">已保存</span>
+                        </div>
+                        <p class="small text-muted mt-3 mb-3"></p>
+                        <div class="d-flex gap-2 mt-auto">
+                            <button type="button" class="btn btn-primary btn-sm reopen-task"><i class="fas fa-folder-open me-1"></i>重新打开</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm delete-task"><i class="fas fa-trash me-1"></i>删除</button>
+                        </div>
+                    </div>`;
+                    item.querySelector('h3').textContent = task.title;
+                    item.querySelector('.history-meta').textContent = new Date(task.createTime).toLocaleString('zh-CN');
+                    item.querySelector('.small').textContent = `解析${task.demandContent ? ' · ' : ''}${task.kocResult ? 'KOC匹配 · ' : ''}${task.scheduleData ? '排期简报' : '等待后续生成'}`;
+                    item.querySelector('.reopen-task').addEventListener('click', () => reopenTask(task));
+                    item.querySelector('.delete-task').addEventListener('click', async function () {
+                        if (!window.confirm('确定删除这条历史任务吗？')) {
+                            return;
+                        }
+                        try {
+                            await apiFetch(`/project/${task.id}`, { method: 'DELETE' });
+                            if (currentTaskId === task.id) currentTaskId = null;
+                            renderHistory();
+                        } catch (error) {
+                            showToast(error.message, 'danger');
+                        }
+                    });
+                    historyList.appendChild(item);
+                });
+            }
+
+            async function upsertCurrentTask(patch) {
+                if (!getCurrentUser() || !authToken) {
+                    return;
+                }
+                currentProjectData = { ...currentProjectData, ...patch };
+                const payload = {
+                    ...(currentTaskId ? { id: currentTaskId } : {}),
+                    projectName: document.getElementById('demand-input').value.trim().slice(0, 32) || '未命名项目',
+                    demandContent: currentProjectData.demand,
+                    kocResult: currentProjectData.koc,
+                    scheduleData: currentProjectData.schedule
+                };
+                const saved = await apiFetch('/project/save', { method: 'POST', body: JSON.stringify(payload) });
+                currentTaskId = saved.id || currentTaskId;
+                renderHistory();
+            }
+
+            function reopenTask(task) {
+                currentTaskId = task.id;
+                currentProjectData = { demand: task.demandContent, koc: task.kocResult, schedule: task.scheduleData };
+                latestDemandResult = task.demandContent;
+                if (task.demandContent) {
+                    document.getElementById('demand-input').value = task.demandContent.input;
+                    document.getElementById('vertical-field').textContent = task.demandContent.vertical;
+                    document.getElementById('target-audience').textContent = task.demandContent.targetAudience;
+                    document.getElementById('blogger-level').textContent = task.demandContent.bloggerLevel;
+                    document.getElementById('content-style').textContent = task.demandContent.contentStyle;
+                    document.getElementById('budget').textContent = task.demandContent.budget;
+                    document.getElementById('quantity').textContent = task.demandContent.quantity;
+                    document.getElementById('result-content').style.display = 'block';
+                }
+                if (task.kocResult) {
+                    document.getElementById('koc-category').value = task.kocResult.category;
+                    document.getElementById('koc-audience').value = task.kocResult.audience;
+                    document.getElementById('koc-quantity').value = task.kocResult.quantity;
+                    matchedKOCs = task.kocResult.items || [];
+                    currentKocPage = 1;
+                    document.getElementById('koc-list').style.display = 'block';
+                    document.querySelector('#koc-results .loading').classList.remove('show');
+                    renderKocPage();
+                    renderCheckout();
+                }
+                if (task.scheduleData) {
+                    const schedule = task.scheduleData;
+                    document.getElementById('schedule-start').value = schedule.start;
+                    document.getElementById('schedule-end').value = schedule.end;
+                    document.getElementById('content-themes').value = schedule.themeCount;
+                    document.getElementById('estimated-exposure').textContent = schedule.overview.exposure;
+                    document.getElementById('estimated-engagement').textContent = schedule.overview.engagement;
+                    document.getElementById('estimated-conversion').textContent = schedule.overview.conversion;
+                    document.getElementById('estimated-cost').textContent = schedule.overview.cost;
+                    document.getElementById('schedule-table').innerHTML = `<table class="table table-striped"><thead><tr><th>日期</th><th>时间</th><th>内容主题</th><th>分配KOC</th><th>预估曝光</th></tr></thead><tbody>${schedule.rows.map(row => `<tr><td>${row.date}</td><td>${row.time}</td><td>${row.theme}</td><td>${row.kocs}</td><td>${row.exposure}</td></tr>`).join('')}</tbody></table>`;
+                    document.getElementById('brief-content').innerHTML = `<h4>${schedule.brief.title}</h4><p><strong>活动主题：</strong>${schedule.brief.theme}</p><p><strong>活动时间：</strong>${schedule.start} 至 ${schedule.end}</p><p><strong>目标人群：</strong>${schedule.brief.audience}</p><p><strong>投放平台：</strong>${schedule.brief.platform}</p><p><strong>投放数量：</strong>${schedule.brief.quantity}</p><p><strong>预估曝光：</strong>${schedule.overview.exposure}</p><p><strong>总预算：</strong>${schedule.overview.cost}</p><p><strong>内容策略：</strong>${schedule.brief.strategy}</p>`;
+                    document.getElementById('schedule-content').style.display = 'block';
+                    document.querySelector('#schedule-result .loading').classList.remove('show');
+                }
+                showPage('features');
+                showFeaturePage(task.scheduleData ? 'schedule' : task.kocResult ? 'koc' : 'demand');
+            }
+
+            function showAuthError(message) {
+                loginError.textContent = message;
+                loginError.hidden = false;
+            }
+
+            function updateAuthMode() {
+                const isRegistering = authMode === 'register';
+                loginTitle.textContent = isRegistering ? '注册素境智投平台' : '登录素境智投平台';
+                authDescription.textContent = isRegistering
+                    ? '注册账号后即可使用需求解析、KOC匹配、排期和合规审查功能。'
+                    : '登录后可使用全部功能，也可以游客体验基础功能。';
+                confirmPasswordGroup.hidden = !isRegistering;
+                confirmPassword.required = isRegistering;
+                emailGroup.hidden = !isRegistering;
+                companyGroup.hidden = !isRegistering;
+                verificationGroup.hidden = !isRegistering;
+                registerEmail.required = isRegistering;
+                verificationCode.required = isRegistering;
+                submitButton.textContent = isRegistering ? '注册并登录' : '登录';
+                toggleAuthMode.textContent = isRegistering ? '已有账号？返回登录' : '没有账号？立即注册';
+                demoAccountHint.hidden = isRegistering;
+                loginError.hidden = true;
+                verificationHint.hidden = true;
+                pendingVerification = null;
+                if (verificationTimer) {
+                    clearInterval(verificationTimer);
+                    verificationTimer = null;
+                }
+                sendCodeButton.disabled = false;
+                sendCodeButton.textContent = '获取验证码';
+            }
+
+            function setAuthenticated(user, token) {
+                authToken = token || authToken;
+                if (authToken) sessionStorage.setItem('lishang-auth-token', authToken);
+                currentUser = user;
+                sessionStorage.removeItem('lishang-guest-mode');
+                authUser.textContent = `已登录：${user.username}`;
+                authUser.hidden = false;
+                logoutButton.textContent = '退出登录';
+                logoutButton.hidden = false;
+                profileNavItem.hidden = false;
+                profileCenter.hidden = true;
+                renderHistory();
+                renderCustomWords();
+                applyGuestRestrictions(false);
+                authBackdrop.hidden = true;
+            }
+
+            function setGuestAuthenticated(showNotice) {
+                authToken = '';
+                currentUser = null;
+                sessionStorage.removeItem('lishang-auth-token');
+                sessionStorage.setItem('lishang-guest-mode', 'true');
+                authUser.textContent = '游客模式';
+                authUser.hidden = false;
+                logoutButton.textContent = '退出游客模式';
+                logoutButton.hidden = false;
+                profileNavItem.hidden = true;
+                profileCenter.hidden = true;
+                currentTaskId = null;
+                applyGuestRestrictions(true);
+                authBackdrop.hidden = true;
+                if (showNotice) {
+                    showToast('已进入游客模式，可体验基础功能', 'primary');
+                }
+            }
+
+            function clearWorkspaceState() {
+                matchedKOCs = [];
+                currentKocPage = 1;
+                currentTaskId = null;
+                currentProjectData = {};
+                document.getElementById('checkout-quantity').value = '0';
+                document.getElementById('checkout-status').className = 'badge text-bg-secondary';
+                document.getElementById('checkout-status').textContent = '待确认';
+                renderCheckout();
+                latestDemandResult = null;
+                reviewResults = [];
+                if (kocPerformanceChart) {
+                    kocPerformanceChart.destroy();
+                    kocPerformanceChart = null;
+                }
+
+                document.querySelectorAll('[data-page-view]').forEach(function (view) {
+                    view.hidden = view.dataset.pageView !== 'home';
+                });
+                showPage('home');
+                showFeaturePage('demand');
+
+                document.getElementById('demand-input').value = '';
+                document.getElementById('result-content').style.display = 'none';
+                document.querySelector('#demand-result .loading').classList.add('show');
+                ['vertical-field', 'target-audience', 'blogger-level', 'content-style', 'budget', 'quantity', 'compliance-risks']
+                    .forEach(id => document.getElementById(id).textContent = '--');
+
+                document.getElementById('koc-category').value = 'beauty';
+                document.getElementById('koc-audience').value = 'college';
+                document.getElementById('koc-quantity').value = '30';
+                document.getElementById('koc-min-followers').value = '';
+                document.getElementById('koc-min-engagement').value = '';
+                document.getElementById('koc-max-risk').value = '';
+                document.getElementById('koc-sort').value = 'score';
+                document.getElementById('koc-list').style.display = 'none';
+                document.querySelector('#koc-results .loading').classList.add('show');
+                document.getElementById('koc-cards').replaceChildren();
+                document.getElementById('koc-pagination').replaceChildren();
+                document.getElementById('koc-page-summary').textContent = '';
+
+                const today = new Date();
+                const nextWeek = new Date(today);
+                nextWeek.setDate(today.getDate() + 7);
+                document.getElementById('schedule-start').valueAsDate = today;
+                document.getElementById('schedule-end').valueAsDate = nextWeek;
+                document.getElementById('content-themes').value = '5';
+                document.getElementById('schedule-content').style.display = 'none';
+                document.querySelector('#schedule-result .loading').classList.add('show');
+                document.getElementById('schedule-table').replaceChildren();
+                document.getElementById('brief-content').replaceChildren();
+
+                document.getElementById('compliance-input').value = '';
+                document.getElementById('custom-forbidden-word').value = '';
+                document.getElementById('review-content').style.display = 'none';
+                document.querySelector('#compliance-result .loading').classList.add('show');
+                document.getElementById('batch-results').replaceChildren();
+                document.getElementById('reviewed-content').replaceChildren();
+                document.getElementById('risk-level').textContent = '低风险';
+                document.getElementById('risk-content').textContent = '未发现明显风险';
+                document.getElementById('suggestions').textContent = '无需修改';
+                document.getElementById('custom-word-count').textContent = '0 个词';
+                document.getElementById('custom-word-list').replaceChildren();
+
+                Object.keys(localStorage)
+                    .filter(key => key.startsWith('lishang-form-draft-'))
+                    .forEach(key => localStorage.removeItem(key));
+                setGlobalLoading(false);
+            }
+
+            function clearAuthentication() {
+                clearWorkspaceState();
+                authToken = '';
+                currentUser = null;
+                sessionStorage.removeItem('lishang-auth-token');
+                sessionStorage.removeItem('lishang-guest-mode');
+                authUser.textContent = '';
+                authUser.hidden = true;
+                logoutButton.hidden = true;
+                profileNavItem.hidden = true;
+                profileCenter.hidden = true;
+                currentTaskId = null;
+                applyGuestRestrictions(false);
+                loginForm.reset();
+                authMode = 'login';
+                updateAuthMode();
+                loginError.hidden = true;
+                authBackdrop.hidden = false;
+                document.getElementById('login-username').focus();
+            }
+
+            // 启动时先检测后端连通性，再恢复登录态
+            checkBackendHealth().then(isOnline => {
+                if (isOnline && authToken) {
+                    apiFetch('/user/me').then(payload => setAuthenticated(payload.user)).catch(() => clearAuthentication());
+            } else if (sessionStorage.getItem('lishang-guest-mode') === 'true') {
+                setGuestAuthenticated(false);
+            } else {
+                clearAuthentication();
+            }
+
+            });
+
+            guestModeButton.addEventListener('click', () => setGuestAuthenticated(true));
+            document.querySelectorAll('[data-page]').forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    showPage(link.dataset.page);
+                });
+            });
+            document.querySelectorAll('[data-feature-page]').forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    showPage('features', link.dataset.featurePage);
+                });
+            });
+            document.getElementById('checkout-quantity').addEventListener('input', renderCheckout);
+            document.getElementById('checkout-coupon').addEventListener('input', renderCheckout);
+            document.getElementById('submit-checkout').addEventListener('click', async function () {
+                const message = document.getElementById('checkout-message');
+                if (!matchedKOCs.length) {
+                    message.className = 'alert alert-warning mt-3 mb-0';
+                    message.textContent = '请先完成 KOC 匹配，结算数据将与匹配结果保持一致。';
+                    message.hidden = false;
+                    return;
+                }
+                if (!getCurrentUser()) {
+                    message.className = 'alert alert-warning mt-3 mb-0';
+                    message.textContent = '请先登录后提交结算订单。';
+                    message.hidden = false;
+                    return;
+                }
+                try {
+                    setGlobalLoading(true, '正在创建结算订单...');
+                    const coupon = document.getElementById('checkout-coupon').value.trim().toUpperCase();
+                    const payload = await apiFetch('/checkout/orders', { method: 'POST', body: JSON.stringify({ kocIds: matchedKOCs.map(koc => koc.id), coupon, paymentMethod: document.querySelector('input[name="checkout-payment"]:checked').value, note: document.getElementById('checkout-note').value.trim() }) });
+                    document.getElementById('checkout-status').className = 'badge text-bg-warning';
+                    document.getElementById('checkout-status').textContent = '待支付';
+                    document.getElementById('payment-order-no').textContent = payload.order.orderNo;
+                    document.getElementById('payment-total').textContent = `¥${Number(payload.order.total).toFixed(2)}`;
+                    const paymentLabels = { alipay: '支付宝', wechat: '微信支付', unionpay: '银联支付' };
+                    document.getElementById('payment-method-label').textContent = paymentLabels[payload.order.paymentMethod] || '在线支付';
+                    document.getElementById('payment-instruction').textContent = `请打开${paymentLabels[payload.order.paymentMethod] || '支付应用'}扫码完成支付`;
+                    document.getElementById('payment-method-icon').className = `fab fa-${payload.order.paymentMethod === 'alipay' ? 'alipay' : payload.order.paymentMethod === 'wechat' ? 'weixin' : 'cc-visa'} fa-3x text-primary mb-3`;
+                    showPage('payment');
+                } catch (error) {
+                    message.className = 'alert alert-danger mt-3 mb-0';
+                    message.textContent = error.message;
+                    message.hidden = false;
+                } finally {
+                    setGlobalLoading(false);
+                }
+            });
+            document.getElementById('back-to-checkout').addEventListener('click', function () { showPage('features', 'checkout'); });
+            document.getElementById('payment-complete').addEventListener('click', async function () {
+                try {
+                    await apiFetch(`/checkout/orders/${document.getElementById('payment-order-no').textContent}/pay`, { method: 'POST' });
+                    const message = document.getElementById('payment-message');
+                    message.className = 'alert alert-success mt-3 mb-0';
+                    message.textContent = '支付状态已提交，订单已标记为已支付。';
+                    message.hidden = false;
+                } catch (error) {
+                    showToast(error.message, 'danger');
+                }
+            });
+            renderCheckout();
+            showPage('home');
+
+            loginForm.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const username = document.getElementById('login-username').value.trim();
+                const password = document.getElementById('login-password').value;
+                if (username.length < 3 || username.length > 20 || !/^[A-Za-z0-9_]+$/.test(username)) {
+                    showAuthError('账号需为3-20位字母、数字或下划线。');
+                    return;
+                }
+                if (password.length < 6) {
+                    showAuthError('密码至少需要6位。');
+                    return;
+                }
+                if (authMode === 'register') {
+                    const email = registerEmail.value.trim().toLowerCase();
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                        showAuthError('请输入有效的邮箱地址。');
+                        return;
+                    }
+                    if (!pendingVerification || pendingVerification.email !== email
+                        || pendingVerification.expiresAt < Date.now()) {
+                        showAuthError('请先获取当前邮箱的验证码。');
+                        return;
+                    }
+                    if (verificationCode.value.trim() !== pendingVerification.code) {
+                        showAuthError('邮箱验证码错误。');
+                        return;
+                    }
+                    if (password !== confirmPassword.value) {
+                        showAuthError('两次输入的密码不一致。');
+                        return;
+                    }
+                    try {
+                        const payload = await apiFetch('/user/register', { method: 'POST', body: JSON.stringify({ username, password, company: registerCompany.value.trim() || '未填写', email }) });
+                        pendingVerification = null;
+                        setAuthenticated(payload.user, payload.token);
+                        loginError.hidden = true;
+                    } catch (error) {
+                        showAuthError(error.message);
+                    }
+                } else {
+                    try {
+                        const payload = await apiFetch('/user/login', { method: 'POST', body: JSON.stringify({ username, password }) });
+                        setAuthenticated(payload.user, payload.token);
+                        loginError.hidden = true;
+                    } catch (error) {
+                        showAuthError(error.message);
+                    }
+                }
+            });
+
+            sendCodeButton.addEventListener('click', function () {
+                const email = registerEmail.value.trim().toLowerCase();
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showAuthError('请先输入有效的邮箱地址。');
+                    registerEmail.focus();
+                    return;
+                }
+                const code = String(Math.floor(100000 + Math.random() * 900000));
+                pendingVerification = { email: email, code: code, expiresAt: Date.now() + 5 * 60 * 1000 };
+                verificationHint.textContent = `演示验证码：${code}（5分钟内有效）`;
+                verificationHint.hidden = false;
+                let remaining = 60;
+                sendCodeButton.disabled = true;
+                sendCodeButton.textContent = `${remaining}s后重试`;
+                verificationTimer = setInterval(function () {
+                    remaining -= 1;
+                    if (remaining <= 0) {
+                        clearInterval(verificationTimer);
+                        verificationTimer = null;
+                        sendCodeButton.disabled = false;
+                        sendCodeButton.textContent = '重新获取';
+                    } else {
+                        sendCodeButton.textContent = `${remaining}s后重试`;
+                    }
+                }, 1000);
+            });
+
+            toggleAuthMode.addEventListener('click', function () {
+                authMode = authMode === 'login' ? 'register' : 'login';
+                loginForm.reset();
+                updateAuthMode();
+            });
+
+            logoutButton.addEventListener('click', clearAuthentication);
+
+            // 设置默认日期
+            const today = new Date();
+            const nextWeek = new Date(today);
+            nextWeek.setDate(today.getDate() + 7);
+
+            document.getElementById('schedule-start').valueAsDate = today;
+            document.getElementById('schedule-end').valueAsDate = nextWeek;
+            restoreDrafts();
+
+            // 需求解析功能
+            document.getElementById('analyze-demand').addEventListener('click', async function () {
+                const input = document.getElementById('demand-input').value.trim();
+                if (!input) {
+                    alert('请输入需求描述');
+                    return;
+                }
+
+                document.querySelector('#demand-result .loading').classList.add('show');
+                document.getElementById('result-content').style.display = 'none';
+                setGlobalLoading(true, '正在解析品牌需求...');
+
+                try {
+                    const payload = await apiFetch('/demand/analyze', { method: 'POST', body: JSON.stringify({ input }) });
+                    const result = payload.result;
+                    latestDemandResult = result;
+                    setGlobalLoading(false);
+                    document.querySelector('#demand-result .loading').classList.remove('show');
+                    document.getElementById('result-content').style.display = 'block';
+                    document.getElementById('vertical-field').textContent = result.vertical;
+                    document.getElementById('target-audience').textContent = result.targetAudience;
+                    document.getElementById('blogger-level').textContent = result.bloggerLevel;
+                    document.getElementById('content-style').textContent = result.contentStyle;
+                    document.getElementById('budget').textContent = result.budget;
+                    document.getElementById('quantity').textContent = result.quantity;
+                    const complianceRisks = document.getElementById('compliance-risks');
+                    complianceRisks.textContent = result.compliance;
+                    currentTaskId = null;
+                    currentProjectData = {};
+                    await upsertCurrentTask({ demand: result });
+                } catch (error) {
+                    setGlobalLoading(false);
+                    document.querySelector('#demand-result .loading').classList.remove('show');
+                    showToast(error.message, 'danger');
+                }
+            });
+
+            // 匹配KOC功能
+            document.getElementById('find-koc').addEventListener('click', async function () {
+                document.querySelector('#koc-results .loading').classList.add('show');
+                document.getElementById('koc-list').style.display = 'none';
+                setGlobalLoading(true, '正在匹配合适的 KOC...');
+
+                const category = document.getElementById('koc-category').value;
+                const audience = document.getElementById('koc-audience').value;
+                const quantity = Number.parseInt(document.getElementById('koc-quantity').value, 10);
+                const requestBody = {
+                    category,
+                    audience,
+                    quantity,
+                    minFollowers: document.getElementById('koc-min-followers').value,
+                    minEngagement: document.getElementById('koc-min-engagement').value,
+                    maxRisk: document.getElementById('koc-max-risk').value,
+                    sort: document.getElementById('koc-sort').value
+                };
+                try {
+                    const payload = await apiFetch('/koc/match', { method: 'POST', body: JSON.stringify(requestBody) });
+                    matchedKOCs = payload.result || [];
+                    currentKocPage = 1;
+                    renderKocPage();
+                    document.querySelector('#koc-results .loading').classList.remove('show');
+                    document.getElementById('koc-list').style.display = 'block';
+                    await upsertCurrentTask({ koc: { category, audience, quantity, items: matchedKOCs } });
+                } catch (error) {
+                    showToast(error.message, 'danger');
+                } finally {
+                    setGlobalLoading(false);
+                }
+                return;
+
+                Promise.resolve().then(function () {
+                    setGlobalLoading(false);
+                    document.querySelector('#koc-results .loading').classList.remove('show');
+                    document.getElementById('koc-list').style.display = 'block';
+
+                    const category = document.getElementById('koc-category').value;
+                    const audience = document.getElementById('koc-audience').value;
+                    const quantity = Number.parseInt(document.getElementById('koc-quantity').value, 10);
+                    const categoryMap = {
+                        beauty: ['美妆', '护肤'],
+                        fashion: ['时尚'],
+                        food: ['美食'],
+                        tech: ['科技'],
+                        lifestyle: ['生活']
+                    };
+                    const categoryKeywords = categoryMap[category] || [];
+                    const filteredKOCs = [].filter(koc => {
+                        const matchesCategory = koc.categories.some(item => categoryKeywords.includes(item));
+                        const matchesAudience = audience === 'all' || audience === 'college' || audience === 'genz';
+                        return matchesCategory && matchesAudience;
+                    }).slice(0, Number.isInteger(quantity) && quantity > 0 ? quantity : 30);
+
+                    matchedKOCs = [].filter(koc => {
+                        const categoryKeywords = {
+                            beauty: ['美妆', '护肤'],
+                            fashion: ['时尚'],
+                            food: ['美食'],
+                            tech: ['科技'],
+                            lifestyle: ['生活']
+                        }[category] || [];
+                        return koc.categories.some(item => categoryKeywords.includes(item));
+                    }).filter(koc => {
+                        const minFollowers = Number.parseInt(document.getElementById('koc-min-followers').value, 10);
+                        const minEngagement = Number.parseFloat(document.getElementById('koc-min-engagement').value);
+                        const maxRisk = Number.parseFloat(document.getElementById('koc-max-risk').value);
+                        return (!Number.isFinite(minFollowers) || koc.followerCount >= minFollowers)
+                            && (!Number.isFinite(minEngagement) || koc.engagementRate >= minEngagement)
+                            && (!Number.isFinite(maxRisk) || koc.riskScore * 100 <= maxRisk);
+                    });
+                    const sortBy = document.getElementById('koc-sort').value;
+                    const sorters = {
+                        score: (a, b) => (b.engagementRate + b.conversionRate - b.riskScore * 10) - (a.engagementRate + a.conversionRate - a.riskScore * 10),
+                        engagement: (a, b) => b.engagementRate - a.engagementRate,
+                        conversion: (a, b) => b.conversionRate - a.conversionRate,
+                        followers: (a, b) => b.followerCount - a.followerCount,
+                        risk: (a, b) => a.riskScore - b.riskScore
+                    };
+                    matchedKOCs.sort(sorters[sortBy] || sorters.score);
+                    matchedKOCs = matchedKOCs.slice(0, Number.isInteger(quantity) && quantity > 0 ? quantity : 30);
+                    currentKocPage = 1;
+                    renderKocPage();
+                    upsertCurrentTask({
+                        koc: {
+                            category: category,
+                            audience: audience,
+                            quantity: quantity,
+                            ids: matchedKOCs.map(koc => koc.id)
+                        }
+                    });
+                    /*
+                    // 旧版渲染逻辑保留在注释中，便于后续迁移
+                    const kocCards = document.getElementById('koc-cards');
+                    kocCards.innerHTML = '';
+                    if (filteredKOCs.length === 0) {
+                        const emptyState = document.createElement('p');
+                        emptyState.className = 'text-muted text-center';
+                        emptyState.textContent = '暂无符合条件的KOC，请调整筛选条件。';
+                        kocCards.appendChild(emptyState);
+                    }
+
+                    filteredKOCs.forEach(koc => {
+                        const card = document.createElement('div');
+                        card.className = 'col-md-4 mb-4';
+                        card.innerHTML = `
+                            <div class="card koc-card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="card-title">${koc.name}</h5>
+                                        <span class="badge bg-primary">${koc.university}</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">粉丝数: ${koc.followerCount.toLocaleString()}</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">互动率: ${koc.engagementRate}%</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">转化率: ${koc.conversionRate}%</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">内容风格: ${koc.contentStyle}</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">擅长领域: ${koc.categories.join(', ')}</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">历史合作: ${koc.pastBrands.join(', ')}</small>
+                                    </div>
+                                    <div class="mt-3">
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" style="width: ${(1 - koc.riskScore) * 100}%" aria-valuenow="${(1 - koc.riskScore) * 100}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <small class="text-muted mt-1 d-block">风险评分: ${(koc.riskScore * 100).toFixed(1)}%</small>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        kocCards.appendChild(card);
+                    });
+
+                    // 生成图表
+                    const ctx = document.getElementById('koc-performance-chart').getContext('2d');
+                    if (kocPerformanceChart) {
+                        kocPerformanceChart.destroy();
+                    }
+                    kocPerformanceChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: filteredKOCs.slice(0, 10).map(koc => koc.name),
+                            datasets: [
+                                {
+                                    label: '预估曝光量',
+                                    data: filteredKOCs.slice(0, 10).map(koc => koc.performanceData.exposure),
+                                    backgroundColor: 'rgba(102, 126, 234, 0.6)',
+                                    borderColor: 'rgba(102, 126, 234, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: '预估互动数',
+                                    data: filteredKOCs.slice(0, 10).map(koc => koc.performanceData.engagement),
+                                    backgroundColor: 'rgba(118, 75, 162, 0.6)',
+                                    borderColor: 'rgba(118, 75, 162, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Top 10 KOC 性能数据'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                    */
+                }, 2000);
+            });
+
+            // 生成排期功能
+            document.getElementById('create-schedule').addEventListener('click', async function () {
+                if (isGuestMode()) {
+                    showToast('排期生成仅对登录用户开放，请先登录', 'warning');
+                    return;
+                }
+                if (!matchedKOCs.length) {
+                    showToast('请先完成 KOC 匹配，再生成排期', 'warning');
+                    return;
+                }
+                const startInput = document.getElementById('schedule-start').value;
+                const endInput = document.getElementById('schedule-end').value;
+                const themeCount = Number.parseInt(document.getElementById('content-themes').value, 10);
+                if (!startInput || !endInput) {
+                    alert('请选择开始日期和结束日期');
+                    return;
+                }
+                if (new Date(startInput) > new Date(endInput)) {
+                    alert('开始日期不能晚于结束日期');
+                    return;
+                }
+                if (!Number.isInteger(themeCount) || themeCount < 1 || themeCount > 10) {
+                    alert('内容主题数量必须是1到10之间的整数');
+                    return;
+                }
+
+                try {
+                    setGlobalLoading(true, '正在生成投放排期与简报...');
+                    const payload = await apiFetch('/schedule/generate', { method: 'POST', body: JSON.stringify({ start: startInput, end: endInput, themeCount, kocIds: matchedKOCs.map(koc => koc.id) }) });
+                    const result = payload.result;
+                    document.getElementById('estimated-exposure').textContent = result.overview.exposure;
+                    document.getElementById('estimated-engagement').textContent = result.overview.engagement;
+                    document.getElementById('estimated-conversion').textContent = result.overview.conversion;
+                    document.getElementById('estimated-cost').textContent = result.overview.cost;
+                    document.getElementById('schedule-table').innerHTML = `<table class="table table-striped"><thead><tr><th>日期</th><th>时间</th><th>内容主题</th><th>分配KOC</th><th>预估曝光</th></tr></thead><tbody>${result.rows.map(row => `<tr><td>${row.date}</td><td>${row.time}</td><td>${row.theme}</td><td>${row.kocs}</td><td>${row.exposure}</td></tr>`).join('')}</tbody></table>`;
+                    document.getElementById('brief-content').innerHTML = `<h4>${result.brief.title}</h4><p><strong>活动主题：</strong>${result.brief.theme}</p><p><strong>活动时间：</strong>${startInput} 至 ${endInput}</p><p><strong>目标人群：</strong>${result.brief.audience}</p><p><strong>投放平台：</strong>${result.brief.platform}</p><p><strong>投放数量：</strong>${result.brief.quantity}</p><p><strong>预估曝光：</strong>${result.overview.exposure}</p><p><strong>预估互动：</strong>297,500</p><p><strong>预估转化：</strong>112,000</p><p><strong>总预算：</strong>${result.overview.cost}</p><p><strong>内容策略：</strong>${result.brief.strategy}</p>`;
+                    document.getElementById('schedule-content').style.display = 'block';
+                    document.querySelector('#schedule-result .loading').classList.remove('show');
+                    await upsertCurrentTask({ schedule: result });
+                } catch (error) {
+                    showToast(error.message, 'danger');
+                } finally {
+                    setGlobalLoading(false);
+                }
+                return;
+
+                document.querySelector('#schedule-result .loading').classList.add('show');
+                document.getElementById('schedule-content').style.display = 'none';
+                setGlobalLoading(true, '正在生成投放排期与简报...');
+
+                Promise.resolve().then(function () {
+                    setGlobalLoading(false);
+                    document.querySelector('#schedule-result .loading').classList.remove('show');
+                    document.getElementById('schedule-content').style.display = 'block';
+
+                    // 填充数据
+                    document.getElementById('estimated-exposure').textContent = '3,500,000';
+                    document.getElementById('estimated-engagement').textContent = '8.5%';
+                    document.getElementById('estimated-conversion').textContent = '3.2%';
+                    document.getElementById('estimated-cost').textContent = '¥20,000';
+
+                    // 生成排期表格
+                    const scheduleTable = document.getElementById('schedule-table');
+                    const themes = ['产品开箱', '使用体验', '效果对比', '日常妆容', 'Q&A解答'];
+                    const times = ['12:00', '18:00', '20:00', '19:00', '13:00'];
+                    const kocNames = ['张小美, 李小花', '王小明, 赵小丽', '陈小红, 刘小美', '吴小花, 郑小明', '孙小丽, 周小红'];
+                    const exposures = ['200,000', '180,000', '190,000', '170,000', '160,000'];
+                    const scheduleStart = new Date(`${startInput}T00:00:00`);
+                    const scheduleEnd = new Date(`${endInput}T00:00:00`);
+                    const daysAvailable = Math.floor((scheduleEnd - scheduleStart) / 86400000) + 1;
+                    const rowCount = Math.min(themeCount, daysAvailable);
+                    const formatDate = function (date) {
+                        return [
+                            date.getFullYear(),
+                            String(date.getMonth() + 1).padStart(2, '0'),
+                            String(date.getDate()).padStart(2, '0')
+                        ].join('-');
+                    };
+                    const scheduleRows = Array.from({ length: rowCount }, function (_, index) {
+                        const date = new Date(scheduleStart);
+                        date.setDate(scheduleStart.getDate() + index);
+                        return `<tr><td>${formatDate(date)}</td><td>${times[index % times.length]}</td><td>${themes[index % themes.length]}</td><td>${kocNames[index % kocNames.length]}</td><td>${exposures[index % exposures.length]}</td></tr>`;
+                    }).join('');
+                    scheduleTable.innerHTML = `
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>时间</th>
+                                    <th>内容主题</th>
+                                    <th>分配KOC</th>
+                                    <th>预估曝光</th>
+                                </tr>
+                            </thead>
+                            <tbody>${scheduleRows}</tbody>
+                        </table>
+                    `;
+
+                    // 生成简报内容
+                    const briefContent = document.getElementById('brief-content');
+                    briefContent.innerHTML = `
+                        <h4>投放简报</h4>
+                        <p><strong>活动主题：</strong>大学生美妆护肤产品推广</p>
+                        <p><strong>活动时间：</strong>${startInput} 至 ${endInput}</p>
+                        <p><strong>目标人群：</strong>18-22岁大学生</p>
+                        <p><strong>投放平台：</strong>校园KOC社交媒体</p>
+                        <p><strong>投放数量：</strong>100个校园KOC</p>
+                        <p><strong>预估曝光：</strong>3,500,000</p>
+                        <p><strong>预估互动：</strong>297,500</p>
+                        <p><strong>预估转化：</strong>112,000</p>
+                        <p><strong>总预算：</strong>¥20,000</p>
+                        <p><strong>内容策略：</strong>以真实种草为主，强调产品效果和使用体验</p>
+                    `;
+                    upsertCurrentTask({
+                        schedule: {
+                            start: startInput,
+                            end: endInput,
+                            themeCount: themeCount,
+                            exposure: '3,500,000',
+                            engagement: '8.5%',
+                            conversion: '3.2%',
+                            cost: '¥20,000',
+                            table: scheduleTable.innerHTML,
+                            brief: briefContent.innerHTML
+                        }
+                    });
+                });
+            });
+
+            document.getElementById('match-koc').addEventListener('click', function () {
+                if (latestDemandResult) {
+                    document.getElementById('koc-category').value = latestDemandResult.category || 'beauty';
+                    document.getElementById('koc-audience').value = latestDemandResult.audience || 'college';
+                    const parsedQuantity = Number.parseInt(latestDemandResult.quantity, 10);
+                    if (Number.isInteger(parsedQuantity)) {
+                        document.getElementById('koc-quantity').value = Math.max(1, Math.min(parsedQuantity, 100));
+                    }
+                }
+                showPage('features', 'koc');
+                document.getElementById('koc-matching').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('find-koc').click();
+            });
+
+            document.getElementById('generate-schedule').addEventListener('click', function () {
+                showPage('features', 'schedule');
+                document.getElementById('schedule-generation').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('create-schedule').click();
+            });
+
+            function downloadFile(fileName, content, mimeType) {
+                const blob = new Blob([content], { type: mimeType || 'text/plain;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(link.href);
+                showToast(`已下载：${fileName}`, 'success');
+            }
+
+            document.getElementById('download-demand').addEventListener('click', function () {
+                const input = document.getElementById('demand-input').value.trim();
+                if (!input || document.getElementById('result-content').style.display === 'none') {
+                    showToast('请先完成需求解析，再下载结果', 'warning');
+                    return;
+                }
+                const result = {
+                    demand: input,
+                    vertical: document.getElementById('vertical-field').textContent,
+                    targetAudience: document.getElementById('target-audience').textContent,
+                    bloggerLevel: document.getElementById('blogger-level').textContent,
+                    contentStyle: document.getElementById('content-style').textContent,
+                    budget: document.getElementById('budget').textContent,
+                    quantity: document.getElementById('quantity').textContent,
+                    compliance: document.getElementById('compliance-risks').innerText,
+                    exportedAt: new Date().toISOString()
+                };
+                downloadFile('品牌需求解析结果.json', JSON.stringify(result, null, 2), 'application/json;charset=utf-8');
+            });
+
+            document.getElementById('download-koc').addEventListener('click', function () {
+                if (!matchedKOCs.length || document.getElementById('koc-list').style.display === 'none') {
+                    showToast('请先完成 KOC 匹配，再下载结果', 'warning');
+                    return;
+                }
+                const result = {
+                    filters: {
+                        category: document.getElementById('koc-category').value,
+                        audience: document.getElementById('koc-audience').value,
+                        quantity: Number.parseInt(document.getElementById('koc-quantity').value, 10),
+                        sort: document.getElementById('koc-sort').value
+                    },
+                    total: matchedKOCs.length,
+                    kocs: matchedKOCs,
+                    exportedAt: new Date().toISOString()
+                };
+                downloadFile('KOC匹配结果.json', JSON.stringify(result, null, 2), 'application/json;charset=utf-8');
+            });
+
+            document.getElementById('download-brief').addEventListener('click', function () {
+                const brief = document.getElementById('brief-content').innerText.trim();
+                if (!brief) {
+                    alert('请先生成排期简报');
+                    return;
+                }
+                downloadFile('投放简报.txt', brief);
+            });
+
+            document.getElementById('download-schedule').addEventListener('click', function () {
+                const brief = document.getElementById('brief-content').innerText.trim();
+                const rows = [...document.querySelectorAll('#schedule-table tbody tr')];
+                if (!brief || !rows.length) {
+                    showToast('请先生成排期简报，再下载排期数据', 'warning');
+                    return;
+                }
+                const result = {
+                    settings: {
+                        start: document.getElementById('schedule-start').value,
+                        end: document.getElementById('schedule-end').value,
+                        themeCount: Number.parseInt(document.getElementById('content-themes').value, 10)
+                    },
+                    overview: {
+                        exposure: document.getElementById('estimated-exposure').textContent,
+                        engagement: document.getElementById('estimated-engagement').textContent,
+                        conversion: document.getElementById('estimated-conversion').textContent,
+                        cost: document.getElementById('estimated-cost').textContent
+                    },
+                    schedule: rows.map(row => [...row.cells].map(cell => cell.innerText)),
+                    brief: brief,
+                    exportedAt: new Date().toISOString()
+                };
+                downloadFile('投放排期数据.json', JSON.stringify(result, null, 2), 'application/json;charset=utf-8');
+            });
+
+            const customWordInput = document.getElementById('custom-forbidden-word');
+            const customWordList = document.getElementById('custom-word-list');
+            const customWordCount = document.getElementById('custom-word-count');
+            const batchResults = document.getElementById('batch-results');
+
+            function getCustomWordKey() {
+                const username = currentUser?.username || 'guest';
+                return `lishang-custom-forbidden-words-${username}`;
+            }
+
+            function getCustomWords() {
+                const words = JSON.parse(localStorage.getItem(getCustomWordKey()) || '[]');
+                return Array.isArray(words) ? words : [];
+            }
+
+            function renderCustomWords() {
+                const words = getCustomWords();
+                customWordCount.textContent = `${words.length} 个词`;
+                customWordList.replaceChildren();
+                words.forEach(function (word) {
+                    const tag = document.createElement('span');
+                    tag.className = 'badge text-bg-secondary d-inline-flex align-items-center gap-1';
+                    tag.textContent = word;
+                    const removeButton = document.createElement('button');
+                    removeButton.className = 'btn-close btn-close-white';
+                    removeButton.type = 'button';
+                    removeButton.setAttribute('aria-label', `删除${word}`);
+                    removeButton.addEventListener('click', function () {
+                        localStorage.setItem(getCustomWordKey(), JSON.stringify(getCustomWords().filter(item => item !== word)));
+                        renderCustomWords();
+                    });
+                    tag.appendChild(removeButton);
+                    customWordList.appendChild(tag);
+                });
+            }
+
+            function replaceRiskWords(text, riskWords) {
+                return riskWords.reduce((result, word) => result.split(word).join('***'), text);
+            }
+
+            function renderHighlighted(container, text, riskWords) {
+                container.replaceChildren();
+                if (!riskWords.length) {
+                    container.textContent = text;
+                    return;
+                }
+                const pattern = new RegExp(riskWords.map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g');
+                let lastIndex = 0;
+                text.replace(pattern, function (word, offset) {
+                    container.appendChild(document.createTextNode(text.slice(lastIndex, offset)));
+                    const highlightedWord = document.createElement('span');
+                    highlightedWord.className = 'risk-highlight';
+                    highlightedWord.textContent = word;
+                    container.appendChild(highlightedWord);
+                    lastIndex = offset + word.length;
+                    return word;
+                });
+                container.appendChild(document.createTextNode(text.slice(lastIndex)));
+            }
+
+            function renderBatchResults() {
+                batchResults.replaceChildren();
+                if (reviewResults.length < 2) {
+                    return;
+                }
+                const heading = document.createElement('h4');
+                heading.textContent = `批量检测明细（${reviewResults.length} 条）`;
+                batchResults.appendChild(heading);
+                reviewResults.forEach(function (result, index) {
+                    const item = document.createElement('div');
+                    item.className = 'border rounded p-3 mb-3';
+                    item.innerHTML = `<div class="d-flex justify-content-between align-items-center mb-2"><strong>文案 ${index + 1}</strong><span class="badge risk-status"></span></div><div class="risk-preview p-2 bg-light rounded"></div><button type="button" class="btn btn-sm btn-outline-primary mt-2 replace-single"><i class="fas fa-wand-magic-sparkles me-1"></i>自动替换</button>`;
+                    const status = item.querySelector('.risk-status');
+                    status.className = `badge risk-status ${result.riskWords.length ? 'bg-danger' : 'bg-success'}`;
+                    status.textContent = result.riskWords.length ? `发现 ${result.riskWords.length} 个风险词` : '未发现风险';
+                    renderHighlighted(item.querySelector('.risk-preview'), result.replacedText || result.input, result.replacedText ? [] : result.riskWords);
+                    const replaceButton = item.querySelector('.replace-single');
+                    if (result.replacedText) {
+                        replaceButton.disabled = true;
+                        replaceButton.textContent = '已完成替换';
+                    }
+                    replaceButton.addEventListener('click', function () {
+                        result.replacedText = replaceRiskWords(result.input, result.riskWords);
+                        renderHighlighted(item.querySelector('.risk-preview'), result.replacedText, []);
+                        replaceButton.disabled = true;
+                        replaceButton.textContent = '已完成替换';
+                    });
+                    batchResults.appendChild(item);
+                });
+            }
+
+            document.getElementById('add-forbidden-word').addEventListener('click', function () {
+                if (isGuestMode()) {
+                    showToast('自定义违禁词库仅对登录用户开放', 'warning');
+                    return;
+                }
+                const word = customWordInput.value.trim();
+                if (!word) {
+                    return;
+                }
+                const words = getCustomWords();
+                if (!words.includes(word)) {
+                    words.push(word);
+                    localStorage.setItem(getCustomWordKey(), JSON.stringify(words));
+                    renderCustomWords();
+                }
+                customWordInput.value = '';
+                customWordInput.focus();
+            });
+
+            customWordInput.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    document.getElementById('add-forbidden-word').click();
+                }
+            });
+
+            document.getElementById('review-compliance').addEventListener('click', async function () {
+                const inputs = document.getElementById('compliance-input').value
+                    .split(/\r?\n/).map(text => text.trim()).filter(Boolean);
+                if (!inputs.length) {
+                    alert('请输入至少一条需要审查的文案');
+                    return;
+                }
+                document.querySelector('#compliance-result .loading').classList.add('show');
+                document.getElementById('review-content').style.display = 'none';
+                setGlobalLoading(true, '正在批量审查文案...');
+                try {
+                    const payload = await apiFetch('/compliance/check', { method: 'POST', body: JSON.stringify({ input: inputs.join('\n'), customWords: getCustomWords() }) });
+                    const result = payload.result;
+                    setGlobalLoading(false);
+                    reviewResults = result.results;
+                    const allRiskWords = result.riskWords;
+                    const riskLevel = document.getElementById('risk-level');
+                    const riskContent = document.getElementById('risk-content');
+                    const suggestions = document.getElementById('suggestions');
+                    const reviewedContent = document.getElementById('reviewed-content');
+                    riskLevel.className = `badge rounded-pill ${allRiskWords.length ? 'bg-danger' : 'bg-success'}`;
+                    riskLevel.textContent = allRiskWords.length ? '高风险' : '低风险';
+                    riskContent.textContent = allRiskWords.length ? `检测到以下风险词汇：${allRiskWords.join('、')}` : '未发现明显风险';
+                    suggestions.textContent = allRiskWords.length ? `建议修改或删除以下词汇：${allRiskWords.join('、')}` : '无需修改';
+                    renderHighlighted(reviewedContent, inputs.join('\n'), allRiskWords);
+                    renderBatchResults();
+                    document.querySelector('#compliance-result .loading').classList.remove('show');
+                    document.getElementById('review-content').style.display = 'block';
+                } catch (error) {
+                    setGlobalLoading(false);
+                    document.querySelector('#compliance-result .loading').classList.remove('show');
+                    showToast(error.message, 'danger');
+                }
+            });
+
+            document.getElementById('replace-all-risks').addEventListener('click', function () {
+                reviewResults.forEach(result => {
+                    result.replacedText = replaceRiskWords(result.input, result.riskWords);
+                });
+                renderHighlighted(document.getElementById('reviewed-content'), reviewResults.map(result => result.replacedText).join('\n'), []);
+                renderBatchResults();
+                this.disabled = true;
+                this.textContent = '已完成替换';
+            });
+
+            document.getElementById('download-compliance').addEventListener('click', function () {
+                if (!reviewResults.length) {
+                    showToast('请先完成合规审查，再下载结果', 'warning');
+                    return;
+                }
+                const result = {
+                    total: reviewResults.length,
+                    highRiskCount: reviewResults.filter(item => item.riskWords.length > 0).length,
+                    customWords: getCustomWords(),
+                    results: reviewResults.map(item => ({
+                        input: item.input,
+                        riskWords: item.riskWords,
+                        replacedText: item.replacedText || replaceRiskWords(item.input, item.riskWords)
+                    })),
+                    exportedAt: new Date().toISOString()
+                };
+                downloadFile('批量合规审查结果.json', JSON.stringify(result, null, 2), 'application/json;charset=utf-8');
+            });
+
+            renderCustomWords();
+
+            // 导航链接平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
