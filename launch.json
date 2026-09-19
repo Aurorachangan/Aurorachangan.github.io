@@ -1,0 +1,30 @@
+{
+    // 使用 IntelliSense 了解相关属性。
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "启动后端服务",
+            "program": "${workspaceFolder}/server/server.js",
+            "cwd": "${workspaceFolder}/server",
+            "console": "integratedTerminal",
+            "skipFiles": ["<node_internals>/**"]
+        },
+        {
+            "type": "editor-browser",
+            "request": "launch",
+            "name": "打开前端页面",
+            "url": "http://127.0.0.1:3000/"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "完整调试（后端+前端）",
+            "configurations": ["启动后端服务", "打开前端页面"],
+            "stopAll": true
+        }
+    ]
+}
